@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ Anime Princess Solitaire 🌸 - DSA Edition 💖</title>
+  <meta name="description" content="A super cute anime-style Princess Solitaire game engineered from scratch with academic Data Structures and Algorithms, featuring magical anime themes, fluid drag-and-drop, sparkle hints, and victory celebrations!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-sakura">
+  <!-- Game Container -->
+  <div class="game-wrapper" id="game-app">
+    
+    <!-- Top Navigation Glassmorphic Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-left">
+        <div class="logo-group">
+          <span class="logo-suits">✨ 💖 🌸 🎀 💎</span>
+          <h1 class="logo-title">PRINCESS <span class="logo-subtitle">SOLITAIRE 🌸</span></h1>
+        </div>
+        <div class="dsa-badge" title="Powered by custom Node, Stack, Queue, and DoublyLinkedList data structures">
+          <span class="badge-dot"></span> 🎀 Kawaii DSA Engine
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-actions" id="header-actions">
+        <button id="btn-new-game" class="btn btn-primary" title="Start a new deal (N)">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>🌸 New Game</span>
+        </button>
+
+        <button id="btn-undo" class="btn btn-glass" title="Undo move (Ctrl+Z)" disabled>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+          <span>↺ Undo</span>
+        </button>
+
+        <button id="btn-redo" class="btn btn-glass" title="Redo move (Ctrl+Y)" disabled>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+          <span>↻ Redo</span>
+        </button>
+
+        <button id="btn-hint" class="btn btn-accent" title="Get magical strategic hint (H)">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"/></svg>
+          <span>✨ Hint</span>
+        </button>
+
+        <button id="btn-auto" class="btn btn-glass" title="Auto-collect safe cards to foundations (A)">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-2 10h5l-6 10 2-10H7l6-10z"/></svg>
+          <span>⚡ Auto</span>
+        </button>
+
+        <button id="btn-sound" class="btn btn-icon" title="Toggle Magical Chimes">
+          <svg id="icon-sound-on" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <svg id="icon-sound-off" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+
+        <button id="btn-theme" class="btn btn-icon" title="Switch Cute Aesthetic Theme">
+          <span style="font-size: 15px;">🎀</span>
+        </button>
+
+        <button id="btn-help" class="btn btn-icon" title="Princess Rules & Guide">
+          <span style="font-size: 15px;">💖</span>
+        </button>
+      </div>
+
+      <!-- Live Metrics Dashboard -->
+      <div class="metrics-dashboard" id="metrics-dashboard">
+        <div class="stat-pill" title="Current Score">
+          <span class="stat-label">💖 SCORE</span>
+          <span class="stat-value" id="stat-score">0</span>
+        </div>
+        <div class="stat-pill" title="Total Moves Made">
+          <span class="stat-label">🎀 MOVES</span>
+          <span class="stat-value" id="stat-moves">0</span>
+        </div>
+        <div class="stat-pill" title="Cards placed on Foundations">
+          <span class="stat-label">👑 FOUNDATION</span>
+          <span class="stat-value" id="stat-foundations">0/52</span>
+        </div>
+        <div class="stat-pill" title="Elapsed Time">
+          <span class="stat-label">⏳ TIME</span>
+          <span class="stat-value" id="stat-time">00:00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Floating Strategic Hint Alert -->
+    <div id="hint-banner" class="hint-banner hidden">
+      <span class="hint-icon">✨</span>
+      <span id="hint-text" class="hint-text">Fairy Hint</span>
+      <button id="hint-close" class="hint-close" title="Dismiss">&times;</button>
+    </div>
+
+    <!-- Main Solitaire Game Table Felt -->
+    <main class="solitaire-felt" id="solitaire-felt">
+      
+      <!-- Upper Row: Stock, Waste, and 4 Foundations -->
+      <section class="upper-row" aria-label="Upper Piles">
+        
+        <!-- Stock & Waste Group -->
+        <div class="stock-waste-group">
+          <!-- Stockpile (Queue) -->
+          <div class="pile-slot stock-slot" id="slot-stock" title="Draw Pile (Click or Space)">
+            <div class="slot-placeholder">
+              <span class="placeholder-icon">🌸</span>
+              <span class="placeholder-label">DRAW</span>
+            </div>
+            <div id="stock-container" class="cards-stack"></div>
+            <div id="stock-counter" class="stock-badge">24</div>
+          </div>
+
+          <!-- Waste Pile (Stack) -->
+          <div class="pile-slot waste-slot" id="slot-waste" title="Waste Pile">
+            <div class="slot-placeholder">
+              <span class="placeholder-icon">🎀</span>
+            </div>
+            <div id="waste-container" class="cards-stack"></div>
+          </div>
+        </div>
+
+        <!-- Empty Divider Spacer -->
+        <div class="upper-spacer"></div>
+
+        <!-- 4 Foundation Piles (Stacks: Hearts, Diamonds, Clubs, Spades) -->
+        <div class="foundations-group" aria-label="Foundation Piles">
+          <div class="pile-slot foundation-slot" id="foundation-hearts" data-suit="Hearts" title="Hearts Foundation (Ace to King)">
+            <div class="slot-placeholder suit-red">💖</div>
+            <div class="cards-stack" id="foundation-hearts-container"></div>
+          </div>
+
+          <div class="pile-slot foundation-slot" id="foundation-diamonds" data-suit="Diamonds" title="Diamonds Foundation (Ace to King)">
+            <div class="slot-placeholder suit-red">💎</div>
+            <div class="cards-stack" id="foundation-diamonds-container"></div>
+          </div>
+
+          <div class="pile-slot foundation-slot" id="foundation-clubs" data-suit="Clubs" title="Clubs Foundation (Ace to King)">
+            <div class="slot-placeholder suit-black">🌸</div>
+            <div class="cards-stack" id="foundation-clubs-container"></div>
+          </div>
+
+          <div class="pile-slot foundation-slot" id="foundation-spades" data-suit="Spades" title="Spades Foundation (Ace to King)">
+            <div class="slot-placeholder suit-black">👑</div>
+            <div class="cards-stack" id="foundation-spades-container"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lower Row: 7 Tableau Columns (Doubly Linked Lists) -->
+      <section class="tableaux-row" id="tableaux-row" aria-label="Tableau Columns">
+        <div class="tableau-col" id="col-0" data-col="0"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-1" data-col="1"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-2" data-col="2"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-3" data-col="3"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-4" data-col="4"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-5" data-col="5"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+        <div class="tableau-col" id="col-6" data-col="6"><div class="col-slot-base">👑</div><div class="cards-cascade"></div></div>
+      </section>
+    </main>
+
+    <!-- Bottom Status Notification Bar -->
+    <footer class="app-footer">
+      <div class="footer-status" id="footer-status">
+        <span class="status-indicator"></span>
+        <span id="status-text">🌸 Welcome, Princess! Drag cards or double-click to auto-move. ✨</span>
+      </div>
+      <div class="footer-shortcuts">
+        <span><kbd>Space</kbd> 🌸 Draw</span>
+        <span><kbd>Ctrl+Z</kbd> ↺ Undo</span>
+        <span><kbd>Ctrl+Y</kbd> ↻ Redo</span>
+        <span><kbd>H</kbd> ✨ Hint</span>
+        <span><kbd>A</kbd> ⚡ Auto</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Victory Celebration Modal -->
+  <div id="victory-modal" class="modal-overlay hidden">
+    <div class="modal-card victory-card">
+      <div class="victory-header">
+        <span class="victory-icon">👑 💖 🌸</span>
+        <h2>CONGRATULATIONS, PRINCESS!</h2>
+        <p class="victory-sub">You solved Princess Solitaire with absolute style and grace!</p>
+      </div>
+
+      <div class="victory-stats">
+        <div class="vstat-box">
+          <span class="vstat-lbl">Final Score</span>
+          <span class="vstat-val" id="vic-score">0</span>
+        </div>
+        <div class="vstat-box">
+          <span class="vstat-lbl">Total Moves</span>
+          <span class="vstat-val" id="vic-moves">0</span>
+        </div>
+        <div class="vstat-box">
+          <span class="vstat-lbl">Completion Time</span>
+          <span class="vstat-val" id="vic-time">00:00</span>
+        </div>
+      </div>
+
+      <div class="victory-actions">
+        <button id="btn-vic-play-again" class="btn btn-primary btn-large">🌸 Play Another Round</button>
+        <button id="btn-vic-close" class="btn btn-glass">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help & Rules Modal -->
+  <div id="help-modal" class="modal-overlay hidden">
+    <div class="modal-card help-card">
+      <div class="modal-header">
+        <h3>🌸 💖 Princess Solitaire - Cute Guide 🎀 ✨</h3>
+        <button id="btn-help-close" class="modal-close">&times;</button>
+      </div>
+      <div class="help-body">
+        <h4>✨ Objective</h4>
+        <p>Build all 4 Foundation piles up from <strong>Ace to King</strong> by matching suit: 💖 Hearts, 💎 Diamonds, 🌸 Clubs, and 👑 Spades!</p>
+
+        <h4>🎀 Rules & Princess Strategy</h4>
+        <ul>
+          <li><strong>Tableau Stacking:</strong> Stack cards in descending rank with <strong>alternating colors</strong> (e.g. Sweet Rose 7 on Royal Plum 8).</li>
+          <li><strong>Empty Columns:</strong> Only a <strong>King 👑</strong> (or a royal run starting with a King) can occupy an empty tableau slot.</li>
+          <li><strong>Stock & Waste:</strong> Draw from the Stock Queue to the Waste Stack. When the Stock is empty, click to recycle.</li>
+          <li><strong>Multi-Card Runs:</strong> Drag any face-up card in a column to move it and all cards underneath it in one smooth movement!</li>
+          <li><strong>Quick Moves:</strong> Double-click any playable card to instantly send it to the best available foundation or tableau pile.</li>
+        </ul>
+
+        <h4>🎓 DSA Academic Architecture</h4>
+        <p class="dsa-note">Engineered from scratch using pure pointer-based <strong>Queue</strong> (Stock), <strong>Stack</strong> (Waste & Foundations), and <strong>DoublyLinkedList</strong> (Tableaux) supporting instant $O(1)$ sublist splicing!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas for Victory Animation -->
+  <canvas id="confetti-canvas" class="confetti-canvas pointer-none"></canvas>
+
+  <script src="game.js"></script>
+</body>
+</html>
